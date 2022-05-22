@@ -21,6 +21,7 @@
     "gatsby": "^4.14.1",
     "gatsby-plugin-image": "^2.14.1",
     "gatsby-plugin-mdx": "^3.14.0",
+    "gatsby-plugin-page-creator": "^4.14.1",
     "gatsby-plugin-react-helmet": "^5.14.0",
     "gatsby-plugin-sharp": "^4.14.1",
     "gatsby-plugin-styled-components": "^5.14.0",

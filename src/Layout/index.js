@@ -6,12 +6,12 @@ import styled from 'styled-components';
 
 import Header from './Header';
 
-function Layout({children}) {
-
+function Layout({children, location}) {
+    
 
     return (
         <>
-            <Header/>
+            <Header locationPath={location.pathname.substring(1)}/>
             <Main>{children}</Main>
             <Footer></Footer>
         </>

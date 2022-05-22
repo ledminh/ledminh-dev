@@ -19,23 +19,16 @@ module.exports = {
     __key: "pages"
   },
   {
-    resolve: 'gatsby-source-filesystem',
-    options: {
-      name: 'data',
-      path: `${__dirname}/src/data/`,
-    },
-  },
-  {
     resolve: 'gatsby-plugin-page-creator',
     options: {
-      path: `${__dirname}/src/data/`,
+      path: `./src/pages/`,
     },
   },
   {
     resolve: "gatsby-plugin-mdx",
     options: {
       defaultLayouts: {
-        data: require.resolve(`${__dirname}/src/Layout`)
+        pages: require.resolve(`./src/Layout`)
       }
     }
   }

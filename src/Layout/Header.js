@@ -4,8 +4,33 @@ import styled from 'styled-components';
 
 import { Link } from "gatsby";
 
+const pages = [
+    {
+        name: 'Home',
+        path: '../'
+    },
+    {
+        name: 'About',
+        path: '../about'
+    },
 
-const Header = () => (
+    {
+        name: 'Education',
+        path: '../education'
+    },
+
+    {
+        name: 'Projects',
+        path: '../projects'
+    },
+
+    {
+        name: 'Contact',
+        path: '../contact'
+    },
+]
+
+const Header = ({locationPath}) => (
     <Wrapper>
         <Title>
             <Name><h1>LEDMINH</h1></Name>
@@ -14,10 +39,18 @@ const Header = () => (
         </Title>
         <Nav>
             <Ul>
-                <Li active><Link to='/'>Home</Link></Li>
-                <Li><Link to='education'>Education</Link></Li>
-                <Li><Link to='projects'>Projects</Link></Li>
-                <Li><Link to='contact'>Contact</Link></Li>
+                {
+                    pages.map(p => <Li 
+                                        key={p.name}
+                                        numItems={pages.length}
+                                        active={locationPath == p.path.substring(3)}
+                                    >
+                                        <Link 
+                                            to={p.path}>
+                                                {p.name}
+                                        </Link>
+                                    </Li>)
+                }
             </Ul>
         </Nav>
     </Wrapper>
@@ -27,6 +60,7 @@ const Header = () => (
 export default Header;
 
 const Wrapper = styled.header`
+
     max-width: 1200px;
     margin: auto;
 `;
@@ -34,7 +68,7 @@ const Wrapper = styled.header`
 const Title = styled.div`
     display: block;
     width: 80%;
-    margin: 2rem auto .5rem;
+    margin:  2rem auto .5rem;
     
     text-align: center;
     
@@ -79,18 +113,25 @@ const Nav = styled.nav`
     width: 80%;
     margin: auto;
     margin-top: 1rem;
+
+
+    display: flex;
+    justify-content: center;
+
 `;
 
 const Ul = styled.ul`
     display: flex;
     flex-flow: row nowrap;
-    justify-content: space-around;
+    justify-content: center;
     list-style-type: none;
 `;
 
 const Li = styled.li`
-    flex-basis: 22%;
-    padding: .3rem;
+    flex-basis: ${props => Math.floor(100/(props.numItems + 1))}%;
+    padding: .3rem 1rem;
+    margin-right: 2rem;
+
     text-align: center;
 
     border: 2px solid white;

@@ -5,6 +5,7 @@ import * as React from "react"
 import styled from 'styled-components';
 
 import Header from './Header';
+import Footer from './Footer';
 
 function Layout({children, location}) {
     
@@ -12,8 +13,11 @@ function Layout({children, location}) {
     return (
         <>
             <Header locationPath={location.pathname.substring(1)}/>
-            <Main>{children}</Main>
-            <Footer></Footer>
+            <Main>
+                {children}
+            </Main>
+            <Footer/>
+            
         </>
     )
 }
@@ -32,11 +36,8 @@ const Main = styled.main`
 
     padding: 1rem;
 
-    box-shadow: 0 0 7px black;
-    border-radius: 30px;
 
-    
-`;
+    color: #616161;
 
-const Footer = styled.footer``;
 
+`

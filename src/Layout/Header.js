@@ -91,7 +91,7 @@ const Dot = styled.span`
     border-radius: 50%;
     background-color: red;
 
-    box-shadow: 0 0 10px red;
+    box-shadow: 0 0 7px red;
     margin-right: .5rem;
 `;
 
@@ -123,15 +123,17 @@ const Nav = styled.nav`
 const Ul = styled.ul`
     display: flex;
     flex-flow: row nowrap;
-    justify-content: center;
+    flex-basis: 100%;
+    justify-content: space-around;
     list-style-type: none;
+
+
 `;
 
 const Li = styled.li`
     flex-basis: ${props => Math.floor(100/(props.numItems + 1))}%;
     padding: .3rem 1rem;
-    margin-right: 2rem;
-
+    
     text-align: center;
 
     border: 2px solid white;

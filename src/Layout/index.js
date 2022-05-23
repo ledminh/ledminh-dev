@@ -39,5 +39,32 @@ const Main = styled.main`
 
     color: #616161;
 
+    a,
+    a:hover,
+    a:active,
+    a:visited {
+        text-decoration: none;
+        color: #7a1f0f;
+        font-weight: bold;
 
+        transition: border .3s;
+    }
+
+    a:hover {
+        border-bottom: 2px solid #7a1f0f;
+    }
+
+
+    .intro {
+        display: inline-block;
+        color: black;
+        font-weight: 600;
+        font-style: italic;
+        margin-bottom: 1rem;
+    }
+
+    h5 {
+        margin: 2rem 0 1rem;
+        border-bottom: 1.2px solid black;
+    }
 `

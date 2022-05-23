@@ -29,7 +29,7 @@ export default Layout;
 
 const Main = styled.main`
     width: 80%;
-    max-width: 64ch;
+    max-width: 66ch;
 
     margin: auto;
     margin-top: 2rem;

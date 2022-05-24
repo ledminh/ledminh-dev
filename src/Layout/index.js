@@ -2,6 +2,8 @@ import '../global.css';
 
 import * as React from "react"
 
+import Helmet from 'react-helmet';
+
 import styled from 'styled-components';
 
 import Header from './Header';
@@ -11,7 +13,10 @@ function Layout({children, location}) {
     
 
     return (
-        <>
+        <>  
+            <Helmet>
+                <script src="https://kit.fontawesome.com/6a23bab7e7.js" crossorigin="anonymous"></script>
+            </Helmet>
             <Header locationPath={location.pathname.substring(1)}/>
             <Main>
                 {children}

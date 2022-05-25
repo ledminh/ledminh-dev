@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import styled from 'styled-components';
+
+import Context from '../Layout/Context';
 
 const LevelStyle = {
     1: {
@@ -26,9 +28,10 @@ const LevelStyle = {
 
 
 const Emphasize = ({children, level}) => {
+    const {highLightLevel} = useContext(Context);
 
     return (
-    <Wrapper level = {level}>
+    <Wrapper level = {level} highLightLevel = {highLightLevel}>
         {children}
     </Wrapper>
     );
@@ -38,6 +41,6 @@ export default Emphasize;
 
 const Wrapper = styled.span`
     font-size: ${props => LevelStyle[props.level].fontSize};
-    color: ${props => LevelStyle[props.level].color};
+    color: ${props => !props.highLightLevel ?  LevelStyle[props.level].color : props.highLightLevel == props.level? LevelStyle[props.level].color : `#ededed`};
     font-weight: bold;
 `;

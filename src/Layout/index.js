@@ -10,20 +10,23 @@ import Header from './Header';
 import Footer from './Footer';
 
 
-
+import Context from './Context';
 
 function Layout({children, location}) {
-    
+    const [highLightLevel, setHighLightLevel] = React.useState(false);
+
     return (
         <>  
             <Helmet>
                 <script src="https://kit.fontawesome.com/6a23bab7e7.js" crossorigin="anonymous"></script>
             </Helmet>
             <Header locationPath={location.pathname.substring(1)}/>
-            <Main>
-                {children}
-            </Main>
-        
+            
+            <Context.Provider value={{highLightLevel, setHighLightLevel}}>
+                <Main highLightLevel={highLightLevel}>
+                    {children}
+                </Main>
+            </Context.Provider>
             <Footer/>
 
             
@@ -47,6 +50,8 @@ const Main = styled.main`
 
 
     color: #616161;
+
+    transition: color .3s;
 
     a,
     a:hover,
@@ -76,4 +81,14 @@ const Main = styled.main`
         margin: 2rem 0 1rem;
         border-bottom: 1.2px solid black;
     }
+
+    ${props => props.highLightLevel?`
+        color: #ededed;
+        a,
+        a:hover,
+        a:active,
+        a:visited { 
+            color: #ededed;
+        }
+    `: ``}
 `

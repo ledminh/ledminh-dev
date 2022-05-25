@@ -41,6 +41,15 @@ module.exports = {
         pages: require.resolve(`./src/Layout`)
       }
     }
-  }
+  },
+
+  {
+    resolve: 'gatsby-source-sanity',
+      options: {
+        projectId: 'gcme95ee',
+        dataset: "main",
+        token: 'skDE73XvoLqMmOcnnRW26pfwuFk3Ikg7ZZ1LRJBcVHFB9w1XtHvPl5NQTAJSP2sy4PIkciMkKJSPM7l07PAyQvzmkAui91cyza29a0czxt2sVpDAze1cozFPL9ul3NfhVefKDqVc4sUIrtQUb8HydDpM989w5h3nTss3PU45uTLch88MmdEn'
+        },
+    },
 ]
 };

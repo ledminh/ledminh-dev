@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 
-const ProjectItem = () => {
+const ProjectItem = ({id, name, description, techs, github_link, demo_link, website_link}) => {
 
     const [expanded, setExpanded] = useState(false);
 
 
     return (
-        <Wrapper expanded={expanded}>
+        <Wrapper key={id} expanded={expanded}>
             <Title expanded={expanded}>
-                <span>PROJECT NAME</span>
+                <span>{name}</span>
                 <button 
                     onClick={() => setExpanded(!expanded)}
                     className={`fa fa-solid fa-angle-down ${expanded?'fa-rotate-180' : ''}`}
@@ -19,17 +19,21 @@ const ProjectItem = () => {
             </Title>
             <Content expanded={expanded}>
                 <Description expanded={expanded}>
-                    Some description about the project. Some description about the project. Some description about the project. Some description about the project.Some description about the project. Some description about the project.Some description about the project.
+                    {
+                        description
+                    }
                 </Description> 
                 <Techs>
-                    <Tech><span>REACT</span></Tech>
-                    <Tech><span>REDUX</span></Tech>
-                    <Tech><span>WEBPACK</span></Tech>
-                    <Tech><span>LODASH</span></Tech>
-                </Techs>
+                    {
+                        techs.map(t => (
+                            <Tech key={t.id}><span>{t.name}</span></Tech>
+                        ))
+                    }
+                </Techs> 
                 <Links>
-                    <a href='https://www.github.com'>GITHUB</a>
-                    <a href='https://www.demo.com'>DEMO</a>
+                    {github_link? <a href={github_link}>GITHUB</a>: ''}
+                    {demo_link? <a href={demo_link}>DEMO</a>: ''}
+                    {website_link? <a href={website_link}>WEBSITE</a>: ''}
                 </Links>
             </Content>
             

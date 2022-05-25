@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: `Minh Le`,
-    siteUrl: `https://www.yourdomain.tld`
+    title: `LEDMINH DEV`,
+    siteUrl: `https://www.ledminh.dev`
   },
   plugins: [
     "gatsby-plugin-styled-components", 

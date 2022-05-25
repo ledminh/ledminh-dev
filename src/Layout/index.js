@@ -19,6 +19,8 @@ function Layout({children, location}) {
         <>  
             <Helmet>
                 <script src="https://kit.fontawesome.com/6a23bab7e7.js" crossorigin="anonymous"></script>
+                <title>LEDMINH DEV</title>
+                <description>My coding home</description>
             </Helmet>
             <Header locationPath={location.pathname.substring(1)}/>
             

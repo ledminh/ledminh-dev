@@ -104,10 +104,11 @@ const Title = styled.div`
 
         @keyframes arrowAnimation {
             50% {
-                transform: scale(1.5);
+                transform: scale(1.5) ${props => props.expanded? 'rotateZ(180deg)' : ''};
                 text-shadow: 0 0 3px red;
             }
         }
+
         .animated {
             animation: arrowAnimation .7s;
         }

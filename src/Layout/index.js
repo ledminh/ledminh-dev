@@ -9,9 +9,11 @@ import styled from 'styled-components';
 import Header from './Header';
 import Footer from './Footer';
 
+
+
+
 function Layout({children, location}) {
     
-
     return (
         <>  
             <Helmet>
@@ -21,7 +23,9 @@ function Layout({children, location}) {
             <Main>
                 {children}
             </Main>
+        
             <Footer/>
+
             
         </>
     )

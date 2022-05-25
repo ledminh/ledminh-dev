@@ -42,17 +42,26 @@ function ContactPage({location}) {
 const Wrapper = styled.div`
     text-align: center;
 
+    border: 2px solid #006666;
+    border-radius: 30px;
+
     p {
         margin: 1rem 0;
+        transform: translateY(-2rem);
     }
+
 
     .fa-address-book {
         color: #006666;
         margin-bottom: 2rem;
+
+        transform: translateY(-2rem);
     }
 
 `
 
-const AWrap = styled.div``;
+const AWrap = styled.div`
+    transform: translateY(-2rem);
+`;
 
 export default ContactPage;

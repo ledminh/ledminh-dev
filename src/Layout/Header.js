@@ -69,6 +69,7 @@ const Title = styled.div`
     display: block;
     width: 80%;
     margin:  2rem auto .5rem;
+    padding-bottom: .5rem;
     
     text-align: center;
     

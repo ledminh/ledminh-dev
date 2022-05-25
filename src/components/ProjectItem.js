@@ -6,16 +6,21 @@ import styled from 'styled-components';
 const ProjectItem = ({id, name, description, techs, github_link, demo_link, website_link}) => {
 
     const [expanded, setExpanded] = useState(false);
-
+    const [titleHovered, setTitleHovered] = useState(false);
 
     return (
         <Wrapper key={id} expanded={expanded}>
-            <Title expanded={expanded}>
+            <Title 
+                expanded={expanded}
+                onMouseEnter={() => setTitleHovered(true)}
+                onMouseLeave={() => setTitleHovered(false)}
+                >
                 <span>{name}</span>
                 <button 
                     onClick={() => setExpanded(!expanded)}
-                    className={`fa fa-solid fa-angle-down ${expanded?'fa-rotate-180' : ''}`}
-                    />
+                    >
+                        <i className={`fa fa-solid fa-angle-down ${expanded?'fa-rotate-180' : ''} ${titleHovered? 'animated': ''}`} />
+                </button>
             </Title>
             <Content expanded={expanded}>
                 <Description expanded={expanded}>
@@ -55,6 +60,8 @@ const Wrapper = styled.div`
         box-shadow: 0 0 5px black;
 
     `:``}
+
+    
 `
 
 const Title = styled.div`
@@ -70,13 +77,15 @@ const Title = styled.div`
     
     transition: background-color .3s;
 
+    
     ${props => props.expanded? `
         background-color: #f5d9d7;
 
     `:``}
+
+
     button {
         font-size: 1.5rem;
-        transition: transform .3s;
 
         background-color: inherit;
         color: inherit;
@@ -84,10 +93,26 @@ const Title = styled.div`
 
         cursor: pointer;
 
+        
         :hover {
             color: red;
         }
+
+        i {
+            transition: transform .3s;
+        }
+
+        @keyframes arrowAnimation {
+            50% {
+                transform: scale(1.5);
+                text-shadow: 0 0 3px red;
+            }
+        }
+        .animated {
+            animation: arrowAnimation .7s;
+        }
     }
+
 
 
 `

@@ -133,7 +133,6 @@ const Ul = styled.ul`
 
 const Li = styled.li`
     flex-basis: ${props => Math.floor(100/(props.numItems + 1))}%;
-    padding: .3rem 1rem;
     
     text-align: center;
 
@@ -144,7 +143,8 @@ const Li = styled.li`
     a,
     a:hover,
     a:active,
-    a:visited {
+    a:visited,
+    a:focus {
         display: inline-block;
         width: 100%;
         height: 100%;
@@ -152,8 +152,11 @@ const Li = styled.li`
         text-decoration: none;
 
         color: #006666;
+        padding: .3rem 1rem;
+
 
         font-weight: 600;
+        border: none;
     }
 
     :hover {

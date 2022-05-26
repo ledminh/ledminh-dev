@@ -1,54 +1,57 @@
 import * as React from "react"
 import { Link } from "gatsby"
 
-// styles
-const pageStyles = {
-  color: "#232129",
-  padding: "96px",
-  fontFamily: "-apple-system, Roboto, sans-serif, serif",
-}
-const headingStyles = {
-  marginTop: 0,
-  marginBottom: 64,
-  maxWidth: 320,
-}
+import styled from 'styled-components';
+import Layout from "../Layout";
 
-const paragraphStyles = {
-  marginBottom: 48,
-}
-const codeStyles = {
-  color: "#8A6534",
-  padding: 4,
-  backgroundColor: "#FFF4DB",
-  fontSize: "1.25rem",
-  borderRadius: 4,
-}
-
-// markup
-const NotFoundPage = () => {
+const NotFoundPage = ({location}) => {
   return (
-    <main style={pageStyles}>
-      <title>Not found</title>
-      <h1 style={headingStyles}>Page not found</h1>
-      <p style={paragraphStyles}>
-        Sorry{" "}
-        <span role="img" aria-label="Pensive emoji">
-          😔
-        </span>{" "}
-        we couldn’t find what you were looking for.
-        <br />
-        {process.env.NODE_ENV === "development" ? (
-          <>
-            <br />
-            Try creating a page in <code style={codeStyles}>src/pages/</code>.
-            <br />
-          </>
-        ) : null}
-        <br />
-        <Link to="/">Go home</Link>.
-      </p>
-    </main>
+    <Layout location={location}>
+        <Wrapper>
+          <Title>404</Title>
+          <Description>FILE NOT FOUND</Description>
+          <Solution>GO BACK <Link to='/'>HOME</Link></Solution>
+        </Wrapper>
+    </Layout>
   )
 }
 
 export default NotFoundPage
+
+const Wrapper = styled.div`
+  width: 20rem;
+  height: 20rem;
+  
+  margin: auto;
+  border-radius: 50%;
+  background-color: black;
+  
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  
+`;
+
+const Title = styled.div`
+  font-size: 5rem;
+  font-weight: bold;
+
+  color: #e3e6e4;
+`
+
+const Description = styled.div`
+  margin-top: 2.5rem;
+  font-size: 2rem;
+
+  color: #bbbdbb;
+`
+
+const Solution = styled.div`
+
+margin-top: 1.4rem;
+  font-size: 1.7rem;
+
+  color: #bbbdbb;
+
+`

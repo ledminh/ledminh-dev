@@ -119,16 +119,21 @@ const Nav = styled.nav`
     display: flex;
     justify-content: center;
 
+    
+
 `;
 
 const Ul = styled.ul`
     display: flex;
-    flex-flow: row nowrap;
+    flex-flow: row wrap;
     flex-basis: 100%;
     justify-content: space-around;
     list-style-type: none;
 
-
+    @media (max-width: 575px) {
+        background-color: #ebebeb;
+        
+    }
 `;
 
 const Li = styled.li`
@@ -139,6 +144,12 @@ const Li = styled.li`
     border: 2px solid white;
 
     transition: border .4s, background-color .4s;
+
+    @media (max-width: 575px) {
+        flex-basis: 45%;
+        border: 2px solid #ebebeb;
+
+    }
 
     a,
     a:hover,
@@ -169,5 +180,10 @@ const Li = styled.li`
 
     ${props => props.active? `
         border-bottom: 2px solid red;
+
+        @media (max-width: 575px) {
+            background-color: #f7cbcb;
+
+        }
     `:``}
 `;

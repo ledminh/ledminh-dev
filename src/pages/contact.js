@@ -45,6 +45,10 @@ const Wrapper = styled.div`
     border: 2px solid #006666;
     border-radius: 30px;
 
+    box-shadow: 0 0 5px black;
+    background-color: #f2f0f0;
+    padding: 1rem;
+
     p {
         margin: 1rem 0;
         transform: translateY(-2rem);

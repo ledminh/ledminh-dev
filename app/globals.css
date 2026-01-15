@@ -1,42 +1,32 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: light;
-  --paper: #fff6ea;
-  --ink: #1c1a17;
-  --ink-soft: #5a544e;
-  --accent: #d35f2a;
-  --accent-2: #0f6f60;
-  --line: rgba(28, 26, 23, 0.12);
+  color-scheme: dark;
+  --paper: #13110f;
+  --ink: #f6efe5;
+  --ink-soft: #c6bdb2;
+  --accent: #ff8f5a;
+  --accent-2: #4ed1bb;
+  --line: rgba(246, 239, 229, 0.12);
 }
 
 body {
-  background: radial-gradient(
-      circle at 12% 12%,
-      rgba(211, 95, 42, 0.16),
-      transparent 38%
-    ),
-    radial-gradient(circle at 88% 18%, rgba(15, 111, 96, 0.18), transparent 40%),
-    linear-gradient(120deg, #fffaf2 0%, #f5efe6 52%, #f9f4ec 100%);
+  background: linear-gradient(120deg, #171716 0%, #2e2d2d 50%, #434242 90%);
   color: var(--ink);
   min-height: 100%;
 }
 
 .page-shell {
   position: relative;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 246, 234, 0.85),
-    rgba(255, 246, 234, 0.7)
-  );
+  background: rgba(24, 22, 20, 0.9);
   border: 1px solid var(--line);
-  box-shadow: 0 40px 80px rgba(28, 26, 23, 0.12);
+  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.45);
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(24, 21, 18, 0.7);
   border: 1px solid var(--line);
-  box-shadow: 0 24px 50px rgba(28, 26, 23, 0.12);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(12px);
 }
 
@@ -49,6 +39,77 @@ body {
 
 .accent-text {
   color: var(--accent);
+}
+
+.title-bright {
+  color: #e9e1d5;
+  text-shadow: 0 0 24px rgba(255, 143, 90, 0.35);
+}
+
+.mdx-article {
+  color: var(--ink-soft);
+  line-height: 1.7;
+  font-size: 1rem;
+}
+
+.mdx-article h1,
+.mdx-article h2,
+.mdx-article h3 {
+  color: var(--ink);
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.mdx-article h1 {
+  font-size: 2.25rem;
+}
+
+.mdx-article h2 {
+  font-size: 1.6rem;
+}
+
+.mdx-article h3 {
+  font-size: 1.2rem;
+}
+
+.mdx-article p {
+  margin: 1rem 0;
+}
+
+.mdx-article ul {
+  margin: 1rem 0 1rem 1.25rem;
+  list-style: disc;
+}
+
+.mdx-article li {
+  margin: 0.5rem 0;
+}
+
+.mdx-article em {
+  color: var(--ink);
+  font-style: italic;
+}
+
+.about-clamp {
+  max-height: 8.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.about-clamp::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3rem;
+  background: linear-gradient(
+    to bottom,
+    rgba(24, 22, 20, 0) 0%,
+    rgba(24, 22, 20, 0.35) 55%,
+    rgba(24, 22, 20, 0.7) 100%
+  );
 }
 
 @keyframes rise {

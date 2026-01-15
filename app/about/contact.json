@@ -1,0 +1,27 @@
+[
+  {
+    "label": "Email",
+    "value": "minh.le@ledminh.dev",
+    "href": "mailto:minh.le@ledminh.dev",
+    "accent": true
+  },
+  {
+    "label": "Secondary Email",
+    "value": "duyminh.le310@gmail.com",
+    "href": "mailto:duyminh.le310@gmail.com"
+  },
+  {
+    "label": "Location",
+    "value": "Greenville, South Carolina"
+  },
+  {
+    "label": "LinkedIn",
+    "value": "linkedin.com/in/ledminh",
+    "href": "https://www.linkedin.com/in/ledminh/"
+  },
+  {
+    "label": "GitHub",
+    "value": "github.com/ledminh",
+    "href": "https://github.com/ledminh"
+  }
+]

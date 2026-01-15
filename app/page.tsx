@@ -1,20 +1,20 @@
 export default function Home() {
   return (
     <div className="px-4 pb-16 pt-10 sm:px-6 lg:px-10">
-      <div className="page-shell mx-auto max-w-6xl overflow-hidden rounded-[32px]">
+      <div className="page-shell mx-auto max-w-6xl overflow-hidden rounded-4xl">
         <header className="flex flex-col gap-6 border-b border-black/10 bg-white/70 px-6 py-6 backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-10">
           <div className="flex items-center gap-3">
-            <span className="h-11 w-11 rounded-2xl border border-black/10 bg-white/80 text-center text-2xl font-semibold leading-[2.75rem]">
+            <span className="h-11 w-11 rounded-2xl border border-black/10 bg-white/80 text-center text-2xl font-semibold leading-11">
               ML
             </span>
             <div>
-              <p className="text-sm uppercase tracking-[0.3em] text-[color:var(--ink-soft)]">
+              <p className="text-sm uppercase tracking-[0.3em] text-(--ink-soft)">
                 Portfolio
               </p>
               <p className="text-lg font-semibold">Minh Le</p>
             </div>
           </div>
-          <nav className="flex flex-wrap gap-4 text-sm font-medium text-[color:var(--ink-soft)]">
+          <nav className="flex flex-wrap gap-4 text-sm font-medium text-(--ink-soft)">
             <a className="hover:text-black" href="#work">
               Work
             </a>
@@ -40,7 +40,7 @@ export default function Home() {
               <h1 className="text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
                 Designing clean, calm front ends for complex products.
               </h1>
-              <p className="text-base text-[color:var(--ink-soft)] sm:text-lg">
+              <p className="text-base text-(--ink-soft) sm:text-lg">
                 I am Minh Le, a front-end focused developer based in South
                 Carolina. I like building thoughtful UI systems, elevating
                 design quality, and shipping experiences that feel effortless.
@@ -58,7 +58,7 @@ export default function Home() {
               </div>
               <div className="flex flex-wrap gap-4">
                 <a
-                  className="rounded-full bg-[color:var(--accent)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200/70 transition hover:-translate-y-0.5"
+                  className="rounded-full bg-(--accent) px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-orange-200/70 transition hover:-translate-y-0.5"
                   href="#projects"
                 >
                   View projects
@@ -74,7 +74,7 @@ export default function Home() {
 
             <div className="glass-card flex flex-col gap-6 rounded-[28px] p-6 animate-rise animate-rise-delay-1">
               <div className="flex items-center justify-between">
-                <p className="text-sm font-semibold text-[color:var(--ink-soft)]">
+                <p className="text-sm font-semibold text-(--ink-soft)">
                   Availability
                 </p>
                 <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">
@@ -85,22 +85,24 @@ export default function Home() {
                 <p className="text-2xl font-semibold">
                   Focused on product UI, motion, and accessibility.
                 </p>
-                <p className="text-sm text-[color:var(--ink-soft)]">
-                  Currently supporting AI training workflows while sharpening
-                  my front-end craft.
+                <p className="text-sm text-(--ink-soft)">
+                  Currently supporting AI training workflows while sharpening my
+                  front-end craft.
                 </p>
               </div>
               <div className="space-y-2 text-sm">
                 <div className="flex items-center justify-between border-b border-black/10 pb-2">
-                  <span className="text-[color:var(--ink-soft)]">Location</span>
+                  <span className="text-(--ink-soft)">Location</span>
                   <span className="font-semibold">South Carolina</span>
                 </div>
                 <div className="flex items-center justify-between border-b border-black/10 pb-2">
-                  <span className="text-[color:var(--ink-soft)]">Toolbox</span>
-                  <span className="font-semibold">TypeScript, Figma, Tailwind</span>
+                  <span className="text-(--ink-soft)">Toolbox</span>
+                  <span className="font-semibold">
+                    TypeScript, Figma, Tailwind
+                  </span>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[color:var(--ink-soft)]">Collab</span>
+                  <span className="text-(--ink-soft)">Collab</span>
                   <span className="font-semibold">Remote or hybrid</span>
                 </div>
               </div>
@@ -109,19 +111,19 @@ export default function Home() {
 
           <section className="grid gap-6 border-y border-black/10 bg-white/60 px-6 py-10 sm:grid-cols-3 sm:px-10 animate-rise animate-rise-delay-2">
             <div>
-              <p className="text-sm font-semibold text-[color:var(--ink-soft)]">
+              <p className="text-sm font-semibold text-(--ink-soft)">
                 Years building
               </p>
               <p className="text-3xl font-semibold">4+</p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[color:var(--ink-soft)]">
+              <p className="text-sm font-semibold text-(--ink-soft)">
                 Shipped features
               </p>
               <p className="text-3xl font-semibold">25+</p>
             </div>
             <div>
-              <p className="text-sm font-semibold text-[color:var(--ink-soft)]">
+              <p className="text-sm font-semibold text-(--ink-soft)">
                 Favorite stack
               </p>
               <p className="text-3xl font-semibold">Next.js</p>
@@ -131,7 +133,9 @@ export default function Home() {
           <section className="px-6 py-12 sm:px-10" id="work">
             <div className="flex flex-col gap-2">
               <p className="section-label">Selected work</p>
-              <h2 className="text-3xl font-semibold">Projects that shaped my craft</h2>
+              <h2 className="text-3xl font-semibold">
+                Projects that shaped my craft
+              </h2>
             </div>
             <div className="mt-8 grid gap-6 lg:grid-cols-3">
               {[
@@ -155,19 +159,17 @@ export default function Home() {
                 },
               ].map((item) => (
                 <article
-                  className="glass-card flex h-full flex-col justify-between rounded-[24px] p-6 transition hover:-translate-y-1"
+                  className="glass-card flex h-full flex-col justify-between rounded-3xl p-6 transition hover:-translate-y-1"
                   key={item.title}
                 >
                   <div className="space-y-3">
-                    <p className="text-sm font-semibold text-[color:var(--ink-soft)]">
+                    <p className="text-sm font-semibold text-(--ink-soft)">
                       {item.tag}
                     </p>
                     <h3 className="text-xl font-semibold">{item.title}</h3>
-                    <p className="text-sm text-[color:var(--ink-soft)]">
-                      {item.detail}
-                    </p>
+                    <p className="text-sm text-(--ink-soft)">{item.detail}</p>
                   </div>
-                  <span className="mt-6 text-sm font-semibold text-[color:var(--accent-2)]">
+                  <span className="mt-6 text-sm font-semibold text-(--accent-2)">
                     View case study
                   </span>
                 </article>
@@ -178,7 +180,9 @@ export default function Home() {
           <section className="bg-white/60 px-6 py-12 sm:px-10" id="timeline">
             <div className="flex flex-col gap-2">
               <p className="section-label">Timeline</p>
-              <h2 className="text-3xl font-semibold">Where I have been learning</h2>
+              <h2 className="text-3xl font-semibold">
+                Where I have been learning
+              </h2>
             </div>
             <div className="mt-8 space-y-6 border-l border-black/10 pl-6">
               {[
@@ -202,13 +206,11 @@ export default function Home() {
                 },
               ].map((item) => (
                 <div className="space-y-2" key={item.title}>
-                  <p className="text-sm font-semibold text-[color:var(--accent-2)]">
+                  <p className="text-sm font-semibold text-(--accent-2)">
                     {item.year}
                   </p>
                   <h3 className="text-lg font-semibold">{item.title}</h3>
-                  <p className="text-sm text-[color:var(--ink-soft)]">
-                    {item.detail}
-                  </p>
+                  <p className="text-sm text-(--ink-soft)">{item.detail}</p>
                 </div>
               ))}
             </div>
@@ -217,7 +219,9 @@ export default function Home() {
           <section className="px-6 py-12 sm:px-10" id="study">
             <div className="flex flex-col gap-2">
               <p className="section-label">Study</p>
-              <h2 className="text-3xl font-semibold">Current learning sprint</h2>
+              <h2 className="text-3xl font-semibold">
+                Current learning sprint
+              </h2>
             </div>
             <div className="mt-8 grid gap-5 md:grid-cols-2">
               {[
@@ -227,7 +231,7 @@ export default function Home() {
                 "Web performance and Core Web Vitals",
               ].map((topic) => (
                 <div
-                  className="glass-card rounded-[20px] p-5 text-sm font-medium text-[color:var(--ink-soft)]"
+                  className="glass-card rounded-[20px] p-5 text-sm font-medium text-(--ink-soft)"
                   key={topic}
                 >
                   {topic}
@@ -239,7 +243,9 @@ export default function Home() {
           <section className="bg-white/60 px-6 py-12 sm:px-10" id="projects">
             <div className="flex flex-col gap-2">
               <p className="section-label">Projects</p>
-              <h2 className="text-3xl font-semibold">Side builds worth sharing</h2>
+              <h2 className="text-3xl font-semibold">
+                Side builds worth sharing
+              </h2>
             </div>
             <div className="mt-8 grid gap-6 lg:grid-cols-3">
               {[
@@ -260,14 +266,14 @@ export default function Home() {
                 },
               ].map((project) => (
                 <article
-                  className="glass-card rounded-[24px] p-6 transition hover:-translate-y-1"
+                  className="glass-card rounded-3xl p-6 transition hover:-translate-y-1"
                   key={project.title}
                 >
                   <h3 className="text-xl font-semibold">{project.title}</h3>
-                  <p className="mt-3 text-sm text-[color:var(--ink-soft)]">
+                  <p className="mt-3 text-sm text-(--ink-soft)">
                     {project.detail}
                   </p>
-                  <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-[color:var(--ink-soft)]">
+                  <div className="mt-6 flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.2em] text-(--ink-soft)">
                     <span>Next.js</span>
                     <span>TypeScript</span>
                     <span>UI</span>
@@ -284,18 +290,19 @@ export default function Home() {
                 <h2 className="text-3xl font-semibold">
                   Want a dependable front-end partner?
                 </h2>
-                <p className="text-sm text-[color:var(--ink-soft)]">
+                <p className="text-sm text-(--ink-soft)">
                   I am open to new opportunities, collaborations, and freelance
-                  projects. Send a quick note and I will respond with next steps.
+                  projects. Send a quick note and I will respond with next
+                  steps.
                 </p>
                 <a
-                  className="inline-flex w-fit rounded-full bg-[color:var(--accent-2)] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/70 transition hover:-translate-y-0.5"
+                  className="inline-flex w-fit rounded-full bg-(--accent-2) px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-200/70 transition hover:-translate-y-0.5"
                   href="mailto:minh.le@email.com"
                 >
                   minh.le@email.com
                 </a>
               </div>
-              <div className="space-y-4 text-sm text-[color:var(--ink-soft)]">
+              <div className="space-y-4 text-sm text-(--ink-soft)">
                 <div className="flex items-center justify-between border-b border-black/10 pb-3">
                   <span>Preferred</span>
                   <span className="font-semibold text-black">Email</span>
@@ -306,14 +313,16 @@ export default function Home() {
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Socials</span>
-                  <span className="font-semibold text-black">LinkedIn / GitHub</span>
+                  <span className="font-semibold text-black">
+                    LinkedIn / GitHub
+                  </span>
                 </div>
               </div>
             </div>
           </section>
         </main>
 
-        <footer className="border-t border-black/10 bg-white/70 px-6 py-6 text-sm text-[color:var(--ink-soft)] sm:px-10">
+        <footer className="border-t border-black/10 bg-white/70 px-6 py-6 text-sm text-(--ink-soft) sm:px-10">
           <p>© 2024 Minh Le. Crafted with care in South Carolina.</p>
         </footer>
       </div>

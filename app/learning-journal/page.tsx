@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import Description from "./description.mdx";
+import ToggleContent from "../components/ToggleContent";
 import Link from "next/link";
 
 export const metadata = {
@@ -125,21 +126,23 @@ export default async function LearningLabPage() {
           <h1 className="mt-3 text-4xl font-semibold leading-tight">
             The documentation of my learning journey
           </h1>
-          <div className="mt-4 max-w-2xl text-base text-[color:var(--ink-soft)] sm:text-lg mdx-article">
-            <Description />
+          <div className="mt-4 max-w-2xl text-base text-(--ink-soft) sm:text-lg mdx-article">
+            <ToggleContent>
+              <Description />
+            </ToggleContent>
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {entries.map((entry) => (
               <Link
-                className="glass-card block rounded-[24px] p-6 transition hover:-translate-y-1 hover:shadow-[0_24px_60px_-40px_rgba(15,23,42,0.6)]"
+                className="glass-card block rounded-3xl p-6 transition hover:-translate-y-1 hover:shadow-[0_24px_60px_-40px_rgba(15,23,42,0.6)]"
                 href={`/learning-journal/entries/${entry.slug}`}
                 key={entry.slug}
               >
                 <article>
                   <h2 className="text-2xl font-semibold">{entry.title}</h2>
                   {(entry.date || entry.status || entry.tags) && (
-                    <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-soft)]">
+                    <p className="mt-2 text-xs uppercase tracking-[0.18em] text-(--ink-soft)">
                       {[entry.date, entry.status, entry.tags?.join(" · ")]
                         .filter(Boolean)
                         .join(" · ")}

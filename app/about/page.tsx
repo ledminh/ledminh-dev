@@ -3,9 +3,10 @@ export const metadata = {
   description: "Background, timeline, and contact details for Minh Le.",
 };
 
-import AboutDescription from "./AboutDescription";
 import timeline from "./timeline.json";
 import contact from "./contact.json";
+import ToggleContent from "../components/ToggleContent";
+import Description from "./description.mdx";
 
 export default function AboutPage() {
   return (
@@ -17,7 +18,9 @@ export default function AboutPage() {
             A little more about me
           </h1>
 
-          <AboutDescription />
+          <ToggleContent>
+            <Description />
+          </ToggleContent>
 
           <section className="mt-10">
             <h2 className="text-2xl font-semibold">Timeline</h2>

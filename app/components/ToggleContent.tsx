@@ -1,15 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import Description from "./description.mdx";
 
-export default function AboutDescription() {
+export default function ToggleContent({
+  children,
+  buttonTextExpanded = "Read less",
+  buttonTextCollapsed = "Read more",
+}: {
+  children: React.ReactNode;
+  buttonTextExpanded?: string;
+  buttonTextCollapsed?: string;
+}) {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <div className="mt-6 text-(--ink-soft)">
       <div className={`space-y-4 ${expanded ? "" : "about-clamp"}`}>
-        <Description />
+        {children}
       </div>
       <div className="mt-3 flex items-center gap-2 text-sm">
         <button
@@ -17,7 +24,7 @@ export default function AboutDescription() {
           type="button"
           onClick={() => setExpanded((prev) => !prev)}
         >
-          {expanded ? "Read less" : "Read more"}
+          {expanded ? buttonTextExpanded : buttonTextCollapsed}
         </button>
       </div>
     </div>

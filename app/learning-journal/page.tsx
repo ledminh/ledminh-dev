@@ -1,8 +1,9 @@
 import { promises as fs } from "fs";
 import path from "path";
-import Description from "./description.mdx";
-import ToggleContent from "../components/ToggleContent";
 import Link from "next/link";
+import ToggleContent from "../components/ToggleContent";
+import Breadcrumb from "../components/Breadcrumb";
+import Description from "./description.mdx";
 
 export const metadata = {
   title: "Learning Lab | Minh Le",
@@ -121,8 +122,8 @@ export default async function LearningLabPage() {
   return (
     <div className="px-4 pb-16 pt-10 sm:px-6 lg:px-10">
       <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-4xl">
+        <Breadcrumb />
         <main className="px-6 py-12 sm:px-10">
-          <p className="section-label">Learning Journal</p>
           <h1 className="mt-3 text-4xl font-semibold leading-tight">
             The documentation of my learning journey
           </h1>

@@ -3,17 +3,18 @@ export const metadata = {
   description: "Background, timeline, and contact details for Minh Le.",
 };
 
+import ToggleContent from "../components/ToggleContent";
+import Breadcrumb from "../components/Breadcrumb";
 import timeline from "./timeline.json";
 import contact from "./contact.json";
-import ToggleContent from "../components/ToggleContent";
 import Description from "./description.mdx";
 
 export default function AboutPage() {
   return (
     <div className="px-4 pb-16 pt-10 sm:px-6 lg:px-10">
       <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-4xl">
+        <Breadcrumb />
         <main className="px-6 py-12 sm:px-10">
-          <p className="section-label">About</p>
           <h1 className="title-bright mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
             A little more about me
           </h1>

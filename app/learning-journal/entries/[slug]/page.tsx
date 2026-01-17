@@ -5,7 +5,7 @@ import { getMDXComponent } from "mdx-bundler/client";
 import type { ComponentType } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import Breadcrumb from "../../../components/Breadcrumb";
 
 type EntryFrontmatter = {
   title: string;
@@ -170,14 +170,8 @@ export default async function EntryPage({
   return (
     <div className="px-4 pb-16 pt-10 sm:px-6 lg:px-10">
       <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-4xl">
+        <Breadcrumb />
         <main className="px-6 py-12 sm:px-10">
-          ß
-          <Link
-            className="text-xs uppercase tracking-[0.18em] text-(--ink-soft) transition hover:text-(--accent)"
-            href="/learning-journal"
-          >
-            ← Back to Learning Journal
-          </Link>
           <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
             {entry.frontmatter.title}
           </h1>

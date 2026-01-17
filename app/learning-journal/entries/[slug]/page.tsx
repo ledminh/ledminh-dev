@@ -169,10 +169,11 @@ export default async function EntryPage({
 
   return (
     <div className="px-4 pb-16 pt-10 sm:px-6 lg:px-10">
-      <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-[32px]">
+      <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-4xl">
         <main className="px-6 py-12 sm:px-10">
+          ß
           <Link
-            className="text-xs uppercase tracking-[0.18em] text-[color:var(--ink-soft)] transition hover:text-[color:var(--accent)]"
+            className="text-xs uppercase tracking-[0.18em] text-(--ink-soft) transition hover:text-(--accent)"
             href="/learning-journal"
           >
             ← Back to Learning Journal
@@ -181,11 +182,11 @@ export default async function EntryPage({
             {entry.frontmatter.title}
           </h1>
           {meta ? (
-            <p className="mt-3 text-xs uppercase tracking-[0.18em] text-[color:var(--ink-soft)]">
+            <p className="mt-3 text-xs uppercase tracking-[0.18em] text-(--ink-soft)">
               {meta}
             </p>
           ) : null}
-          <p className="mt-4 max-w-2xl text-base text-[color:var(--ink-soft)] sm:text-lg">
+          <p className="mt-4 max-w-2xl text-base text-(--ink-soft) sm:text-lg">
             {entry.frontmatter.description}
           </p>
           <article className="mdx-article mt-8">

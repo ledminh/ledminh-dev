@@ -17,11 +17,9 @@ export default function AboutPage() {
           <h1 className="title-bright mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
             A little more about me
           </h1>
-
           <ToggleContent>
             <Description />
           </ToggleContent>
-
           <section className="mt-10">
             <h2 className="text-2xl font-semibold">Timeline</h2>
             <div className="mt-4 space-y-4 border-l border-white/10 pl-5 text-sm text-(--ink-soft)">

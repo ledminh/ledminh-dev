@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   pageExtensions: ["ts", "tsx", "mdx"],
 };
 
-const withMDX = createMDX({});
+const withMDX = createMDX({
+  extension: /\.mdx?$/,
+});
 
 export default withMDX(nextConfig);

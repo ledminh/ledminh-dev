@@ -14,9 +14,9 @@ export default function LandingNav() {
         </Link>
         <Link
           className="rounded-lg border border-white/10 bg-white/10 px-5 py-2 hover:text-white"
-          href="/learning-lab"
+          href="/learning-journal"
         >
-          Learning Lab
+          Learning Journal
         </Link>
         <Link
           className="rounded-lg border border-white/10 bg-white/10 px-5 py-2 hover:text-white"

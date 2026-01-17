@@ -125,7 +125,7 @@ export default async function LearningLabPage() {
           <h1 className="mt-3 text-4xl font-semibold leading-tight">
             The documentation of my learning journey
           </h1>
-          <div className="mt-4 max-w-2xl text-base text-[color:var(--ink-soft)] sm:text-lg">
+          <div className="mt-4 max-w-2xl text-base text-[color:var(--ink-soft)] sm:text-lg mdx-article">
             <Description />
           </div>
 
@@ -145,9 +145,9 @@ export default async function LearningLabPage() {
                         .join(" · ")}
                     </p>
                   )}
-                  <p className="mt-3 text-sm text-[color:var(--ink-soft)]">
+                  <div className="mt-3 text-sm text-(--ink-soft)">
                     {entry.description}
-                  </p>
+                  </div>
                 </article>
               </Link>
             ))}

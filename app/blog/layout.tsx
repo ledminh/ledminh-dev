@@ -11,12 +11,8 @@ export default function BlogLayout({
         <Breadcrumb />
         <header className="border-b border-white/10 px-6 py-10 sm:px-10">
           <h1 className="title-bright mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
-            Writing about calm, reliable interfaces
+            Place where I jot down my thoughts.
           </h1>
-          <p className="mt-4 max-w-2xl text-base text-[color:var(--ink-soft)] sm:text-lg">
-            Short essays on UI systems, shipping habits, and whatever I am
-            experimenting with next.
-          </p>
         </header>
         <main className="px-6 py-10 sm:px-10">
           <article className="mdx-article">{children}</article>

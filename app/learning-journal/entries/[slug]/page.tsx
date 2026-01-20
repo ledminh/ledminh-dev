@@ -11,8 +11,6 @@ type EntryFrontmatter = {
   title: string;
   description: string;
   date?: string;
-  status?: string;
-  tags?: string[];
 };
 
 const entriesDir = path.join(
@@ -54,19 +52,10 @@ function toFrontmatter(input: Record<string, string>): EntryFrontmatter | null {
     return null;
   }
 
-  const tags = input.tags
-    ? input.tags
-        .split(",")
-        .map((tag) => tag.trim())
-        .filter(Boolean)
-    : undefined;
-
   return {
     title: input.title,
     description: input.description,
     date: input.date,
-    status: input.status,
-    tags,
   };
 }
 
@@ -157,14 +146,6 @@ export default async function EntryPage({
     notFound();
   }
 
-  const meta = [
-    entry.frontmatter.date,
-    entry.frontmatter.status,
-    entry.frontmatter.tags?.join(" · "),
-  ]
-    .filter(Boolean)
-    .join(" · ");
-
   const Content = getMDXComponent(entry.code) as ComponentType;
 
   return (
@@ -175,13 +156,8 @@ export default async function EntryPage({
           <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">
             {entry.frontmatter.title}
           </h1>
-          {meta ? (
-            <p className="mt-3 text-xs uppercase tracking-[0.18em] text-(--ink-soft)">
-              {meta}
-            </p>
-          ) : null}
-          <p className="mt-4 max-w-2xl text-base text-(--ink-soft) sm:text-lg">
-            {entry.frontmatter.description}
+          <p className="mt-3 text-xs uppercase tracking-[0.18em] text-(--ink-soft)">
+            {entry.frontmatter.date}
           </p>
           <article className="mdx-article mt-8">
             <Content />

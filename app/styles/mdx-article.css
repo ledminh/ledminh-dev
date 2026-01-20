@@ -43,6 +43,15 @@
   font-style: italic;
 }
 
+.mdx-article a {
+  color: var(--accent-2);
+  text-decoration: underline;
+}
+
+.mdx-article a:hover {
+  color: var(--accent);
+}
+
 .mdx-article code {
   background: rgba(255, 255, 255, 0.3);
   color: #13110f;

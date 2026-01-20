@@ -15,8 +15,6 @@ type Entry = {
   description: string;
   slug: string;
   date?: string;
-  status?: string;
-  tags?: string[];
 };
 
 function parseFrontmatter(source: string): Record<string, string> | null {
@@ -73,23 +71,13 @@ async function getEntries(): Promise<Entry[]> {
         let slug = file.name.replace(/\.mdx$/, ""),
           title = frontmatter.title || "",
           description = frontmatter.description || "",
-          date = frontmatter.date || "",
-          status = frontmatter.status || "";
-
-        let tags = frontmatter.tags
-          ? frontmatter.tags
-              .split(",")
-              .map((tag) => tag.trim())
-              .filter(Boolean)
-          : [];
+          date = frontmatter.date || "";
 
         return {
           title,
           description,
           slug,
           date,
-          status,
-          tags,
         };
       }),
     );
@@ -142,11 +130,9 @@ export default async function LearningLabPage() {
               >
                 <article>
                   <h2 className="text-2xl font-semibold">{entry.title}</h2>
-                  {(entry.date || entry.status || entry.tags) && (
+                  {entry.date && (
                     <p className="mt-2 text-xs uppercase tracking-[0.18em] text-(--ink-soft)">
-                      {[entry.date, entry.status, entry.tags?.join(" · ")]
-                        .filter(Boolean)
-                        .join(" · ")}
+                      {entry.date}
                     </p>
                   )}
                   <div className="mt-3 text-sm text-(--ink-soft)">

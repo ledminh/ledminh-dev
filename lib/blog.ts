@@ -57,7 +57,7 @@ export const listBlogPostMeta = async (options?: {
   const response = await dynamo.send(
     new ScanCommand({
       TableName: table,
-    })
+    }),
   );
   const tag = options?.tag?.toLowerCase();
   const query = options?.query?.toLowerCase();
@@ -65,14 +65,14 @@ export const listBlogPostMeta = async (options?: {
     .map((item) => normalizeMeta(item as Record<string, unknown>))
     .filter((item) => item.key?.endsWith(".md"))
     .filter((item) =>
-      tag ? item.tags.some((entry) => entry.toLowerCase() === tag) : true
+      tag ? item.tags.some((entry) => entry.toLowerCase() === tag) : true,
     )
     .filter((item) => {
       if (!query) {
         return true;
       }
       const tagMatch = item.tags.some((entry) =>
-        entry.toLowerCase().includes(query)
+        entry.toLowerCase().includes(query),
       );
       return (
         item.title.toLowerCase().includes(query) ||
@@ -91,7 +91,7 @@ export const getBlogPost = async (key: string): Promise<BlogPost> => {
     new GetCommand({
       TableName: table,
       Key: { key },
-    })
+    }),
   );
   if (!response.Item) {
     throw new Error(`Post not found: ${key}`);
@@ -102,7 +102,7 @@ export const getBlogPost = async (key: string): Promise<BlogPost> => {
     new GetObjectCommand({
       Bucket: bucket,
       Key: s3Key,
-    })
+    }),
   );
   if (!s3Response.Body || !(s3Response.Body instanceof Readable)) {
     throw new Error(`Unable to read post content for ${key}.`);

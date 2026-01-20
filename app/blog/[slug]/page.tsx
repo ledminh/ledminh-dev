@@ -4,25 +4,19 @@ import remarkGfm from "remark-gfm";
 import { getBlogPost } from "@/lib/blog";
 
 type BlogPostPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const key = decodeURIComponent(params.slug);
+  const resolvedParams = await params;
+  const key = decodeURIComponent(resolvedParams.slug);
   const post = await getBlogPost(key);
 
   return (
     <div className="space-y-8">
-      <Link
-        href="/blog"
-        className="text-xs uppercase tracking-[0.2em] text-slate-400 hover:text-slate-200"
-      >
-        Back to blog
-      </Link>
-
-      <header className="space-y-4">
+      <div className="flex items-center justify-between">
         <div className="flex flex-wrap items-center gap-3 text-xs uppercase tracking-[0.2em] text-slate-400">
           <span>{post.key}</span>
           <span>•</span>
@@ -32,16 +26,28 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               : "Draft"}
           </span>
         </div>
+        <Link
+          href="/blog"
+          className="text-xs uppercase tracking-[0.2em] text-slate-400 hover:text-slate-200"
+        >
+          Back to blog
+        </Link>
+      </div>
+
+      <header className="space-y-4 grid gap-4">
         <h1 className="text-3xl font-semibold text-white sm:text-4xl">
           {post.title}
         </h1>
         {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-slate-400">
+            <span className="rounded-full border border-white/10 bg-white/5 px-2 py-1">
+              Tags
+            </span>
             {post.tags.map((tag) => (
               <Link
                 key={`${post.key}-${tag}`}
                 href={`/blog?tag=${encodeURIComponent(tag)}`}
-                className="rounded-full border border-white/10 bg-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.2em] text-slate-200"
+                className="rounded-full border border-white/10 bg-white/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-200 transition hover:bg-white/20"
               >
                 {tag}
               </Link>

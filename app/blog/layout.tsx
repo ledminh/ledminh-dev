@@ -14,9 +14,7 @@ export default function BlogLayout({
             Place where I jot down my thoughts.
           </h1>
         </header>
-        <main className="px-6 py-10 sm:px-10">
-          <article className="mdx-article">{children}</article>
-        </main>
+        <main className="px-6 py-10 sm:px-10">{children}</main>
       </div>
     </div>
   );

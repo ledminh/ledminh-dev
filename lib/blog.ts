@@ -7,6 +7,8 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { Readable } from "stream";
 
+import { secret } from "@aws-amplify/backend";
+
 export type BlogPostMeta = {
   key: string;
   title: string;
@@ -18,13 +20,13 @@ export type BlogPost = BlogPostMeta & {
   content: string;
 };
 
-const bucketName = process.env.S3_BUCKET_NAME;
-const tableName = process.env.DDB_TABLE_NAME;
-const region = process.env.MY_AWS_REGION || process.env.AWS_DEFAULT_REGION;
+const bucketName = secret("S3_BUCKET_NAME");
+const tableName = secret("DDB_TABLE_NAME");
+const region = secret("MY_AWS_REGION") || process.env.AWS_DEFAULT_REGION;
 
-console.log("S3_BUCKET_NAME =", process.env.S3_BUCKET_NAME);
-console.log("DDB_TABLE_NAME =", process.env.DDB_TABLE_NAME);
-console.log("MY_AWS_REGION =", process.env.MY_AWS_REGION);
+console.log("S3_BUCKET_NAME =", bucketName);
+console.log("DDB_TABLE_NAME =", tableName);
+console.log("MY_AWS_REGION =", region);
 
 const getClients = () => {
   if (!bucketName || !tableName || !region) {

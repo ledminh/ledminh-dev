@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@aws-amplify/backend": "^1.20.0",
     "@aws-sdk/client-dynamodb": "^3.971.0",
     "@aws-sdk/client-s3": "^3.971.0",
     "@aws-sdk/lib-dynamodb": "^3.971.0",

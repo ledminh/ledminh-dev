@@ -17,11 +17,13 @@
   {
     "label": "LinkedIn",
     "value": "linkedin.com/in/ledminh",
-    "href": "https://www.linkedin.com/in/ledminh/"
+    "href": "https://www.linkedin.com/in/ledminh/",
+    "accent": true
   },
   {
     "label": "GitHub",
     "value": "github.com/ledminh",
-    "href": "https://github.com/ledminh"
+    "href": "https://github.com/ledminh",
+    "accent": true
   }
 ]

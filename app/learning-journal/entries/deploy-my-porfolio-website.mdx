@@ -1,0 +1,37 @@
+---
+title: "Deploy My Portfolio Website"
+description: "What I learned about using environment variables when deploying a Next.js app on AWS Amplify."
+date: "2026-01-20"
+---
+
+The environment variables that you add in the **Amplify Environment Variables** section are **only available at build time** (this is explicitly noted in the Amplify UI).
+
+When you deploy a Next.js app on Amplify, the process looks like this:
+
+1. Amplify runs a **build step** (for example, `next build`).
+2. The **output of that build** is what gets published.
+3. When users later visit your site in the browser, that is **runtime**.
+4. At runtime, the Amplify environment variables are **no longer available by default**.
+
+---
+
+## The problem
+
+In my blog, when a user visits the site, the app needs access to environment variables in order to:
+
+- Read blog data from **S3**
+- Query **DynamoDB**
+
+Because these variables only existed during the build step, the running app could not access them.
+
+---
+
+## The solution
+
+You need to explicitly copy the build-time environment variables into a file that Next.js will load at runtime.
+
+Add the following line to your `amplify.yml` file **before `next build` runs**:
+
+```bash
+env | grep -e YOUR_ENVIRONMENT_VARIABLE >> .env.production
+```

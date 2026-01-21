@@ -1,7 +1,6 @@
 # Minh Le Portfolio
 
-Personal website that introduces me, shares a timeline and contact details,
-hosts a small blog, and documents my learning journal.
+Personal website that introduces me, shares a timeline and contact details, hosts a small blog, and documents my learning journal.
 
 ## What it does
 

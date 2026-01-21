@@ -20,7 +20,10 @@ export type BlogPost = BlogPostMeta & {
 
 const bucketName = process.env.S3_BUCKET_NAME;
 const tableName = process.env.DDB_TABLE_NAME;
-const region = process.env.MY_AWS_REGION || process.env.AWS_DEFAULT_REGION;
+const region =
+  process.env.MY_AWS_REGION ||
+  process.env.AWS_REGION ||
+  process.env.AWS_DEFAULT_REGION;
 
 const getClients = () => {
   if (!bucketName || !tableName || !region) {

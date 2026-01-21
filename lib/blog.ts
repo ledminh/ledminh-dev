@@ -22,6 +22,10 @@ const bucketName = process.env.S3_BUCKET_NAME;
 const tableName = process.env.DDB_TABLE_NAME;
 const region = process.env.MY_AWS_REGION || process.env.AWS_DEFAULT_REGION;
 
+console.log("S3_BUCKET_NAME =", process.env.S3_BUCKET_NAME);
+console.log("DDB_TABLE_NAME =", process.env.DDB_TABLE_NAME);
+console.log("MY_AWS_REGION =", process.env.MY_AWS_REGION);
+
 const getClients = () => {
   if (!bucketName || !tableName || !region) {
     throw new Error("Missing S3 or DynamoDB configuration.");

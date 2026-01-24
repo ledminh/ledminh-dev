@@ -35,3 +35,148 @@ Add the following line to your `amplify.yml` file **before `next build` runs**:
 ```bash
 env | grep -e YOUR_ENVIRONMENT_VARIABLE >> .env.production
 ```
+
+# How DNS Resolution Works When I Visit `ledminh.dev` (Sanitized Version)
+
+When I type `ledminh.dev` into my browser’s address bar and press **Enter**, a lot happens behind the scenes before any website content is loaded. This post walks through that process step by step, focusing on how DNS resolution works and how AWS CloudFront fits into the picture, **without exposing any personal or network-specific information**.
+
+---
+
+## 1. The Browser and the Operating System
+
+After I press Enter, the browser does **not** know the IP address of `ledminh.dev`. Instead, it asks the **operating system**:
+
+> “What is the IP address for `ledminh.dev`?”
+
+The operating system handles this request using a built-in component called the **stub resolver**.
+
+---
+
+## 2. What Is a Stub Resolver?
+
+The **stub resolver** is a minimal DNS client built into the operating system’s networking stack.
+
+- It is **not** a standalone app or script
+- It does **not** query root servers or TLD servers
+- Its only job is to forward DNS queries to a configured **recursive DNS resolver**
+
+Every modern operating system has a stub resolver.
+
+---
+
+## 3. Where the Stub Resolver Sends the Query
+
+On a typical system, DNS queries are sent to:
+
+- A **local router** (acting as a DNS forwarder)
+- An **ISP-operated recursive DNS resolver**
+
+The stub resolver forwards the DNS query to one of these upstream systems. In practice:
+
+- The router usually forwards the query upstream
+- The **recursive resolver** performs the full DNS resolution
+
+No device-specific IP addresses are required to understand this process.
+
+---
+
+## 4. The Recursive Resolver Takes Over
+
+The **recursive DNS resolver** is responsible for fully resolving the domain name. It does this by walking the DNS hierarchy.
+
+### Step 1: Root Servers
+
+The resolver first queries a **root DNS server**:
+
+> “Who is responsible for `.dev` domains?”
+
+Root servers do not know anything about `ledminh.dev`. They only know which servers manage top-level domains.
+
+The root server replies with the list of **`.dev` TLD servers**.
+
+---
+
+## 5. The `.dev` Top-Level Domain (TLD)
+
+**TLD** stands for **Top-Level Domain**, such as:
+
+- `.com`
+- `.org`
+- `.dev`
+
+The `.dev` TLD is operated by **Google**, acting as the registry. This means Google maintains the authoritative list of which name servers are responsible for each `.dev` domain.
+
+The recursive resolver asks a `.dev` TLD server:
+
+> “Who is authoritative for `ledminh.dev`?”
+
+The `.dev` TLD server responds with a list of authoritative name servers, for example:
+
+```
+ns-231.awsdns-28.com
+ns-1558.awsdns-02.co.uk
+ns-536.awsdns-03.net
+ns-1346.awsdns-40.org
+```
+
+These are **AWS Route 53 name servers**.
+
+---
+
+## 6. Route 53: The Authoritative DNS Server
+
+The recursive resolver now queries **one** of the Route 53 name servers listed above.
+
+Route 53 is authoritative for `ledminh.dev`, meaning it holds the actual DNS records for the domain.
+
+Inside Route 53, there is an **A record (Alias)** that points `ledminh.dev` to a CloudFront distribution:
+
+```
+ledminh.dev → CloudFront distribution
+```
+
+This Alias record does **not** return a hostname to the browser. Instead, AWS internally resolves the CloudFront distribution and returns **IP addresses** for a nearby CloudFront edge location.
+
+---
+
+## 7. Returning the IP Address
+
+The process now reverses:
+
+1. Route 53 returns CloudFront IP addresses to the recursive resolver
+2. The recursive resolver caches the result
+3. The resolver sends the IP address back to:
+   - the OS stub resolver
+   - then the browser
+
+At this point, **DNS resolution is complete**.
+
+---
+
+## 8. Connecting to CloudFront
+
+Now that the browser has an IP address:
+
+1. The browser opens a TCP connection
+2. It performs a TLS (HTTPS) handshake
+3. It sends an HTTPS request to CloudFront
+4. CloudFront serves cached content or fetches it from the origin
+
+DNS is no longer involved after this step.
+
+---
+
+## 9. Key Takeaways
+
+- DNS only maps **names → IP addresses**
+- DNS never serves website content
+- Authority is delegated from:
+  - Root → TLD → Route 53
+- CloudFront is reached **after** DNS completes
+- Alias records exist because CloudFront IPs change over time
+
+---
+
+## Conclusion
+
+This sanitized version preserves the full technical explanation while avoiding exposure of personal network details such as local IP addresses, ISP resolver IPs, or interface identifiers. The architectural concepts remain accurate and applicable to any modern internet connection.

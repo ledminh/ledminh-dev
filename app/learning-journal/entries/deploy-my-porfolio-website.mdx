@@ -19,15 +19,13 @@ When you deploy a Next.js app on AWS Amplify, the process looks roughly like thi
 3. When users later visit your site in the browser, the built output is served. This stage is called **runtime**.
 4. When running your app locally with `npm run dev`, Next.js automatically loads environment variables from `.env.local` and makes them available via `process.env`.
 
-When deploying on Amplify, you can also define environment variables using its UI. However,**those variables are only available at build time**.
+When deploying on Amplify, you can also define environment variables using its UI. However, **those variables are only available at build time**.
 
 At runtime, they are no longer available because the build process has already finished.
 
 This is actually mentioned in the Amplify UI, but I somehow missed it, which cost me about an hour of debugging.
 
----
-
-## Making Environment Variables Available at Runtime
+### Making Environment Variables Available at Runtime
 
 So what if you need environment variables at runtime?
 
@@ -45,6 +43,8 @@ This command:
 - Filters out the one(s) you care about
 - Writes them into .env.production, which Next.js can read at runtime
 
+---
+
 ## Moving My Domain to Route 53
 
 After deploying the app, I needed to point my domain, ledminh.dev, to the new site. At the time, it was still pointing to an older version of my website.
@@ -57,7 +57,6 @@ Once everything propagated, I noticed something interesting in the Route 53 UI:
   - Record name: ledminh.dev
   - Type: A
   - Value: a CloudFront distribution
-
 - Another row with:
   - Record name: ledminh.dev
   - Type: NS
@@ -65,7 +64,7 @@ Once everything propagated, I noticed something interesting in the Route 53 UI:
 
 This sparked my curiosity. I asked ChatGPT about it, and after a long (and very educational) discussion, I finally built a clear mental model of how DNS resolution actually works.
 
-## What Happens When You Visit ledminh.dev
+### What Happens When You Visit ledminh.dev
 
 When I type "ledminh.dev" into my browser’s address bar and press Enter, here’s what happens.
 
@@ -93,9 +92,10 @@ Root servers don’t know anything about ledminh.dev. They only know which serve
 The root server replies with a list of .dev TLD servers.
 
 TLD stands for Top-Level Domain, such as:
-`.com`
-`.org`
-`.dev`
+
+- `.com`
+- `.org`
+- `.dev`
 
 The `.dev` TLD is operated by Google, acting as the registry. This means Google maintains the authoritative list of which name servers are responsible for each .dev domain.
 

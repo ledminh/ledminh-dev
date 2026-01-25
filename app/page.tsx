@@ -3,7 +3,7 @@ import LandingNav from "./components/LandingNav";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center px-4 py-10 sm:px-6 lg:px-10">
+    <div className="flex items-center justify-center px-4 py-10 sm:px-6 lg:px-10">
       <div className="page-shell mx-auto max-w-4xl overflow-hidden rounded-4xl">
         <Breadcrumb />
         <header className="flex flex-col items-center px-8 py-20 text-center backdrop-blur sm:px-14">

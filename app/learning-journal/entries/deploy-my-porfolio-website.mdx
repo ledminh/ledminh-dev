@@ -1,182 +1,121 @@
 ---
-title: "Deploy My Portfolio Website"
-description: "What I learned about using environment variables when deploying a Next.js app on AWS Amplify."
-date: "2026-01-21"
+title: "What I Learned When Deploying My Portfolio Website"
+description: "Lessons learned about environment variables, AWS Amplify, Route 53, and DNS while deploying a Next.js app."
+date: "2026-01-25"
 ---
 
-The environment variables that you add in the **Amplify Environment Variables** section are **only available at build time** (this is explicitly noted in the Amplify UI).
+I recently deployed my portfolio website (this website) to **AWS Amplify**. The site is built with **Next.js**. Since the Amplify’s UI is intuitive, the deployment process itself was fairly straightforward.
 
-When you deploy a Next.js app on Amplify, the process looks like this:
-
-1. Amplify runs a **build step** (for example, `next build`).
-2. The **output of that build** is what gets published.
-3. When users later visit your site in the browser, that is **runtime**.
-4. At runtime, the Amplify environment variables are **no longer available by default**.
+However, there was one issue that took me a while to figure out and is worth writing about: **environment variables**.
 
 ---
 
-## The problem
+## Environment Variables in Next.js on Amplify
 
-In my blog, when a user visits the site, the app needs access to environment variables in order to:
+When you deploy a Next.js app on AWS Amplify, the process looks roughly like this:
 
-- Read blog data from **S3**
-- Query **DynamoDB**
+1. Amplify runs a **build step**, similar to when you run `npm run build` locally.
+2. The output of that build is what gets published and served to users.
+3. When users later visit your site in the browser, the built output is served. This stage is called **runtime**.
+4. When running your app locally with `npm run dev`, Next.js automatically loads environment variables from `.env.local` and makes them available via `process.env`.
 
-Because these variables only existed during the build step, the running app could not access them.
+When deploying on Amplify, you can also define environment variables using its UI. However,**those variables are only available at build time**.
+
+At runtime, they are no longer available because the build process has already finished.
+
+This is actually mentioned in the Amplify UI, but I somehow missed it, which cost me about an hour of debugging.
 
 ---
 
-## The solution
+## Making Environment Variables Available at Runtime
 
-You need to explicitly copy the build-time environment variables into a file that Next.js will load at runtime.
+So what if you need environment variables at runtime?
 
-Add the following line to your `amplify.yml` file **before `next build` runs**:
+The solution is to **copy them into a runtime environment file during the build step**.
 
-```bash
+Amplify allows you to customize the build process via the `amplify.yml` file. By adding the following line _before_ `next build`, you can persist selected environment variables:
+
+```
 env | grep -e YOUR_ENVIRONMENT_VARIABLE >> .env.production
 ```
 
-# How DNS Resolution Works When I Visit `ledminh.dev` (Sanitized Version)
+This command:
 
-When I type `ledminh.dev` into my browser’s address bar and press **Enter**, a lot happens behind the scenes before any website content is loaded. This post walks through that process step by step, focusing on how DNS resolution works and how AWS CloudFront fits into the picture, **without exposing any personal or network-specific information**.
+- Reads all environment variables available at build time
+- Filters out the one(s) you care about
+- Writes them into .env.production, which Next.js can read at runtime
 
----
+## Moving My Domain to Route 53
 
-## 1. The Browser and the Operating System
+After deploying the app, I needed to point my domain, ledminh.dev, to the new site. At the time, it was still pointing to an older version of my website.
 
-After I press Enter, the browser does **not** know the IP address of `ledminh.dev`. Instead, it asks the **operating system**:
+Following AWS’s recommendation, I created a hosted zone in Route 53 and updated my domain registrar to use Route 53’s name servers.
 
-> “What is the IP address for `ledminh.dev`?”
+Once everything propagated, I noticed something interesting in the Route 53 UI:
 
-The operating system handles this request using a built-in component called the **stub resolver**.
+- One row with:
+  - Record name: ledminh.dev
+  - Type: A
+  - Value: a CloudFront distribution
 
----
+- Another row with:
+  - Record name: ledminh.dev
+  - Type: NS
+  - Value: four name server addresses
 
-## 2. What Is a Stub Resolver?
+This sparked my curiosity. I asked ChatGPT about it, and after a long (and very educational) discussion, I finally built a clear mental model of how DNS resolution actually works.
 
-The **stub resolver** is a minimal DNS client built into the operating system’s networking stack.
+## What Happens When You Visit ledminh.dev
 
-- It is **not** a standalone app or script
-- It does **not** query root servers or TLD servers
-- Its only job is to forward DNS queries to a configured **recursive DNS resolver**
+When I type "ledminh.dev" into my browser’s address bar and press Enter, here’s what happens.
 
-Every modern operating system has a stub resolver.
+First, the browser asks the operating system for the IP address of ledminh.dev. The OS handles this using a built-in component called the stub resolver.
 
----
+The stub resolver is a minimal DNS client built into the OS networking stack. It does not resolve domain names by itself. Instead, it forwards DNS queries to configured recursive DNS resolvers.
 
-## 3. Where the Stub Resolver Sends the Query
-
-On a typical system, DNS queries are sent to:
-
-- A **local router** (acting as a DNS forwarder)
-- An **ISP-operated recursive DNS resolver**
-
-The stub resolver forwards the DNS query to one of these upstream systems. In practice:
-
-- The router usually forwards the query upstream
-- The **recursive resolver** performs the full DNS resolution
-
-No device-specific IP addresses are required to understand this process.
-
----
-
-## 4. The Recursive Resolver Takes Over
-
-The **recursive DNS resolver** is responsible for fully resolving the domain name. It does this by walking the DNS hierarchy.
-
-### Step 1: Root Servers
-
-The resolver first queries a **root DNS server**:
-
-> “Who is responsible for `.dev` domains?”
-
-Root servers do not know anything about `ledminh.dev`. They only know which servers manage top-level domains.
-
-The root server replies with the list of **`.dev` TLD servers**.
-
----
-
-## 5. The `.dev` Top-Level Domain (TLD)
-
-**TLD** stands for **Top-Level Domain**, such as:
-
-- `.com`
-- `.org`
-- `.dev`
-
-The `.dev` TLD is operated by **Google**, acting as the registry. This means Google maintains the authoritative list of which name servers are responsible for each `.dev` domain.
-
-The recursive resolver asks a `.dev` TLD server:
-
-> “Who is authoritative for `ledminh.dev`?”
-
-The `.dev` TLD server responds with a list of authoritative name servers, for example:
+On macOS, you can inspect this configuration by running:
 
 ```
-ns-231.awsdns-28.com
-ns-1558.awsdns-02.co.uk
-ns-536.awsdns-03.net
-ns-1346.awsdns-40.org
+scutil --dns
 ```
 
-These are **AWS Route 53 name servers**.
+This shows the IP addresses of:
 
----
+- Your local router (usually acting as a DNS forwarder)
+- Your ISP’s recursive DNS resolver (Spectrum, Xfinity, AT&T, etc.)
 
-## 6. Route 53: The Authoritative DNS Server
+The stub resolver forwards the query to a recursive DNS resolver operated by the ISP. This is where the real DNS work begins.
 
-The recursive resolver now queries **one** of the Route 53 name servers listed above.
+First, the recursive resolver queries a root DNS server: “Who is responsible for .dev domains?”
 
-Route 53 is authoritative for `ledminh.dev`, meaning it holds the actual DNS records for the domain.
+Root servers don’t know anything about ledminh.dev. They only know which servers manage top-level domains.
 
-Inside Route 53, there is an **A record (Alias)** that points `ledminh.dev` to a CloudFront distribution:
+The root server replies with a list of .dev TLD servers.
 
-```
-ledminh.dev → CloudFront distribution
-```
+TLD stands for Top-Level Domain, such as:
+`.com`
+`.org`
+`.dev`
 
-This Alias record does **not** return a hostname to the browser. Instead, AWS internally resolves the CloudFront distribution and returns **IP addresses** for a nearby CloudFront edge location.
+The `.dev` TLD is operated by Google, acting as the registry. This means Google maintains the authoritative list of which name servers are responsible for each .dev domain.
 
----
+The recursive resolver then asks a .dev TLD server: “Who is authoritative for ledminh.dev?”
 
-## 7. Returning the IP Address
+The TLD server responds with a list of four Route 53 name servers, the same ones I saw in the second row of the Route 53 UI.
 
-The process now reverses:
+Next, the recursive resolver queries one of those Route 53 name servers.
 
-1. Route 53 returns CloudFront IP addresses to the recursive resolver
-2. The recursive resolver caches the result
-3. The resolver sends the IP address back to:
-   - the OS stub resolver
-   - then the browser
+Route 53 looks into its hosted zone and finds an A record (Alias) that points ledminh.dev to a CloudFront distribution. This corresponds to the first row I saw in the Route 53 UI.
 
-At this point, **DNS resolution is complete**.
+AWS then resolves the CloudFront distribution internally and returns IP addresses for a nearby CloudFront edge location.
 
----
+The IP address is returned through the chain:
 
-## 8. Connecting to CloudFront
+- Route 53 → recursive resolver
+- Recursive resolver caches the result
+- Recursive resolver → OS stub resolver
+- Stub resolver → browser
 
-Now that the browser has an IP address:
+At this point, DNS resolution is complete.
 
-1. The browser opens a TCP connection
-2. It performs a TLS (HTTPS) handshake
-3. It sends an HTTPS request to CloudFront
-4. CloudFront serves cached content or fetches it from the origin
-
-DNS is no longer involved after this step.
-
----
-
-## 9. Key Takeaways
-
-- DNS only maps **names → IP addresses**
-- DNS never serves website content
-- Authority is delegated from:
-  - Root → TLD → Route 53
-- CloudFront is reached **after** DNS completes
-- Alias records exist because CloudFront IPs change over time
-
----
-
-## Conclusion
-
-This sanitized version preserves the full technical explanation while avoiding exposure of personal network details such as local IP addresses, ISP resolver IPs, or interface identifiers. The architectural concepts remain accurate and applicable to any modern internet connection.
+Now that the browser has an IP address, it will open a TCP connection, perform a TLS (HTTPS) handshake, and send an HTTPS request to CloudFront. CloudFront serves cached content or fetches it from the origin. But that’s it for today. Maybe another day I’ll dig deeper into what happens during the HTTPS handshake and content delivery phase.

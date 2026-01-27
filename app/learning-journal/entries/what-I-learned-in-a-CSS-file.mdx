@@ -1,0 +1,407 @@
+---
+title: "Demystifying Tailwind @theme inline"
+description: "A precise mental model for understanding Tailwind prefixes, tokens, categories, and runtime theming."
+date: "2026-01-26"
+---
+
+# Demystifying Tailwind `@theme inline`: Prefixes, Tokens, Categories, and Runtime Theming
+
+Tailwind CSS often _feels_ magical: you write short utility class names, and somehow a fully styled interface appears.  
+But once you introduce **CSS variables**, **dark mode**, and the new **`@theme` / `@theme inline` at-rules**, that magic can quickly turn into confusion.
+
+This article is a deep dive into how Tailwind _actually_ works under the hood.
+
+By the end, you’ll have a clear, mechanical mental model of:
+
+- what Tailwind does **at build time**
+- what the browser does **at runtime**
+- why `@theme inline` exists
+- how prefixes, tokens, and categories really interact
+
+No hand-waving. No “just trust Tailwind.”  
+Let’s take it apart properly.
+
+---
+
+## The Starting Point: A Real CSS File
+
+We’ll use this file as our running example:
+
+```css
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+```
+
+This file mixes:
+
+- standard CSS
+- CSS custom properties (variables)
+- browser media queries
+- Tailwind-specific compiler directives
+
+Understanding how these layers interact is the key to everything that follows.
+
+---
+
+## CSS Variables and `:root`
+
+The `:root` selector targets the `<html>` element.  
+CSS variables declared here are inherited by the entire document, much like global variables in a programming language.
+
+```css
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+```
+
+Later, they’re consumed like this:
+
+```css
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+```
+
+At **runtime**, the browser resolves `var(--background)` and `var(--foreground)` to actual values.
+
+---
+
+## `@media (prefers-color-scheme)` Is a Runtime Conditional
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+```
+
+This is **pure CSS** — Tailwind is not involved here.
+
+You can think of it as:
+
+```
+if (OS prefers dark mode) {
+  override CSS variables
+}
+```
+
+This logic:
+
+- runs in the browser
+- happens at runtime
+- requires no JavaScript
+
+---
+
+## Tailwind Utilities: The Big Picture
+
+Most Tailwind confusion comes from oversimplifying utilities as just:
+
+```
+<prefix>-<value>
+```
+
+That’s close — but incomplete.
+
+The real model has **three independent parts**:
+
+```
+<prefix>-<token>
+        ↑
+     category
+```
+
+Let’s break those down properly.
+
+---
+
+## Prefixes: Decide the CSS Property
+
+Prefixes correspond to **utility generators** built into Tailwind.  
+Each generator emits a _specific CSS property_.
+
+Examples:
+
+| Prefix    | CSS property emitted |
+| --------- | -------------------- |
+| `bg-`     | `background-color`   |
+| `text-`   | `color`              |
+| `border-` | `border-color`       |
+| `font-`   | `font-family`        |
+| `p-`      | `padding`            |
+
+You can visualize it like this:
+
+```
+bg-*      → background-color: VALUE
+text-*    → color: VALUE
+border-*  → border-color: VALUE
+```
+
+Prefixes decide the **key** in the CSS rule.
+
+---
+
+## Tokens: Supply the Value
+
+Tokens are named values that Tailwind can substitute into utilities.
+
+Examples:
+
+| Token        | Value                     |
+| ------------ | ------------------------- |
+| `white`      | `#ffffff`                 |
+| `2`          | `0.5rem`                  |
+| `sans`       | `system-ui, sans-serif`   |
+| `background` | `var(--color-background)` |
+
+Tokens:
+
+- do **not** know which CSS property they’ll be used for
+- are just values
+
+---
+
+## Categories: The Missing Mental Model
+
+This is the part most explanations skip — and the source of most confusion.
+
+Internally, Tailwind groups tokens into **categories**:
+
+```
+colors
+spacing
+fontSize
+fontFamily
+borderWidth
+```
+
+Categories are **not for the browser**.  
+They exist so Tailwind knows **which utility generators may consume which tokens**.
+
+### ASCII diagram
+
+```
+           ┌────────────┐
+           │  colors    │
+           │────────────│
+           │ white      │
+           │ black      │
+           │ background │
+           └─────┬──────┘
+                 │
+     ┌───────────┼────────────┐
+     │           │            │
+   bg-*        text-*      border-*
+```
+
+All three prefixes are allowed to read from the `colors` category.
+
+---
+
+## Registering a Runtime Color Token
+
+```css
+@theme inline {
+  --color-background: var(--background);
+}
+```
+
+This tells Tailwind:
+
+- category: `color`
+- token name: `background`
+- value: runtime-resolved CSS variable
+
+Now these utilities are valid:
+
+```
+bg-background
+text-background
+border-background
+```
+
+---
+
+## Why Categories Matter (A Concrete Failure Case)
+
+```css
+@theme inline {
+  --spacing-background: var(--background);
+}
+```
+
+This registers `background` under the `spacing` category.
+
+Result:
+
+```
+bg-background      ❌ not generated
+text-background   ❌ not generated
+p-background      ✅ generated (but meaningless)
+```
+
+Same value.  
+Different category.  
+Completely different outcome.
+
+Categories act as **filters**, not types.
+
+---
+
+## What `@theme` Does (Without `inline`)
+
+```css
+@theme {
+  --color-brand: #2563eb;
+}
+```
+
+This registers a **static** color token.
+
+Tailwind assumes:
+
+- the value is known at build time
+- it can safely bake it into generated CSS
+
+Result:
+
+```css
+.bg-brand {
+  background-color: #2563eb;
+}
+```
+
+---
+
+## Why `inline` Exists
+
+```css
+@theme inline {
+  --color-background: var(--background);
+}
+```
+
+`inline` is a contract with Tailwind:
+
+> “This value cannot be resolved at build time.  
+> Emit a CSS variable reference instead.”
+
+Generated output:
+
+```css
+.bg-background {
+  background-color: var(--color-background);
+}
+```
+
+At runtime, the browser resolves:
+
+```
+var(--color-background)
+→ var(--background)
+→ light or dark value
+```
+
+---
+
+## What Happens Without `inline` (And Why It Breaks)
+
+```css
+@theme {
+  --color-background: var(--background);
+}
+```
+
+This violates Tailwind’s assumptions.
+
+Tailwind expects static values inside `@theme`.  
+But `var(--background)` is runtime-only.
+
+Consequences:
+
+- tokens may be dropped
+- utilities may not be generated
+- variants and modifiers may fail unpredictably
+
+The browser could still resolve the variable — but Tailwind can’t safely reason about it.
+
+---
+
+## The Full Pipeline (End-to-End)
+
+```
+BUILD TIME (Tailwind)
+─────────────────────
+@theme inline
+    ↓
+register tokens
+    ↓
+scan HTML / TSX
+    ↓
+generate utilities
+
+RUNTIME (Browser)
+─────────────────
+:root variables
+    ↓
+@media overrides
+    ↓
+CSS variable resolution
+    ↓
+paint pixels
+```
+
+Tailwind and the browser never overlap responsibilities.
+
+---
+
+## Final Mental Model (Lock This In)
+
+```
+Prefix   → chooses the CSS property
+Category → controls which prefixes may use the token
+Token    → supplies the value
+```
+
+And the most important sentence in this entire article:
+
+> **`@theme inline` is not for the browser — it is a promise to Tailwind that this token resolves at runtime, not at build time.**
+
+---
+
+## Closing Thoughts
+
+Once you stop thinking of Tailwind as “CSS classes” and start thinking of it as a **compile-time rule engine**, everything becomes predictable.
+
+Dark mode, theming, and CSS variables stop feeling magical — and start feeling _mechanical_.
+
+That’s exactly where you want to be.

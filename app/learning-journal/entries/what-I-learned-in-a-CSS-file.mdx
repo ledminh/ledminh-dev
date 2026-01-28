@@ -1,31 +1,10 @@
 ---
-title: "Demystifying Tailwind @theme inline"
+title: "What I Learned in a CSS File"
 description: "A precise mental model for understanding Tailwind prefixes, tokens, categories, and runtime theming."
-date: "2026-01-26"
+date: "2026-01-27"
 ---
 
-# Demystifying Tailwind `@theme inline`: Prefixes, Tokens, Categories, and Runtime Theming
-
-Tailwind CSS often _feels_ magical: you write short utility class names, and somehow a fully styled interface appears.  
-But once you introduce **CSS variables**, **dark mode**, and the new **`@theme` / `@theme inline` at-rules**, that magic can quickly turn into confusion.
-
-This article is a deep dive into how Tailwind _actually_ works under the hood.
-
-By the end, you’ll have a clear, mechanical mental model of:
-
-- what Tailwind does **at build time**
-- what the browser does **at runtime**
-- why `@theme inline` exists
-- how prefixes, tokens, and categories really interact
-
-No hand-waving. No “just trust Tailwind.”  
-Let’s take it apart properly.
-
----
-
-## The Starting Point: A Real CSS File
-
-We’ll use this file as our running example:
+Ok, so the other day, after creating a new Next.js project, I suddenly became curious about its default `global.css` file—the one located in the root folder. Here is its entire content:
 
 ```css
 @import "tailwindcss";
@@ -56,30 +35,17 @@ body {
 }
 ```
 
-This file mixes:
+This got me curious because, besides the normal `body` rule, the `@import` at-rule, the `var()` function, and the variables `--background`, `--foreground`, etc., I didn’t really understand the other structures.
 
-- standard CSS
-- CSS custom properties (variables)
-- browser media queries
-- Tailwind-specific compiler directives
-
-Understanding how these layers interact is the key to everything that follows.
+So, I decided to have a little discussion with ChatGPT, and here is what I learned.
 
 ---
 
-## CSS Variables and `:root`
+# The `:root` selector
 
-The `:root` selector targets the `<html>` element.  
-CSS variables declared here are inherited by the entire document, much like global variables in a programming language.
+The `:root` selector targets the `<html>` element. As a result, CSS variables declared here (`--background` and `--foreground`) are available to the entire document, much like global variables in a programming language.
 
-```css
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-```
-
-Later, they’re consumed like this:
+Later, they are consumed like this:
 
 ```css
 body {
@@ -88,11 +54,11 @@ body {
 }
 ```
 
-At **runtime**, the browser resolves `var(--background)` and `var(--foreground)` to actual values.
+At runtime, the browser resolves `var(--background)` and `var(--foreground)` to actual values.
 
 ---
 
-## `@media (prefers-color-scheme)` Is a Runtime Conditional
+# The `@media (prefers-color-scheme)` at-rule
 
 ```css
 @media (prefers-color-scheme: dark) {
@@ -103,62 +69,101 @@ At **runtime**, the browser resolves `var(--background)` and `var(--foreground)`
 }
 ```
 
-This is **pure CSS** — Tailwind is not involved here.
+The `@media` at-rule works like an `if` statement for CSS. You can think of it as:
 
-You can think of it as:
-
-```
-if (OS prefers dark mode) {
-  override CSS variables
+```js
+if (prefersColorScheme === "dark") {
+  --background = "#0a0a0a";
+  --foreground = "#ededed";
 }
 ```
 
-This logic:
-
-- runs in the browser
-- happens at runtime
-- requires no JavaScript
+In other words, when the operating system prefers dark mode, the CSS variables declared in `:root` are overridden with the values `#0a0a0a` for `--background` and `#ededed` for `--foreground`.
 
 ---
 
-## Tailwind Utilities: The Big Picture
+# Tailwind class syntax
 
-Most Tailwind confusion comes from oversimplifying utilities as just:
+Before continuing with our CSS file, we need to take a step back and look at how Tailwind works.
 
+If you want to change the style of an HTML element using Tailwind, you add utility classes to it. Each Tailwind class changes only a single style. For example:
+
+- `bg-white` sets `background-color` to white
+- `text-blue` sets the `color` property to blue
+- `mt-4` sets `margin-top` to `1rem` (16px by default)
+
+You can combine multiple utilities like this:
+
+```html
+<div className="bg-white text-blue mt-4"></div>
 ```
-<prefix>-<value>
-```
 
-That’s close — but incomplete.
+So how does this work?
 
-The real model has **three independent parts**:
+All Tailwind utility classes follow the same structure:
 
 ```
 <prefix>-<token>
-        ↑
-     category
 ```
 
-Let’s break those down properly.
+## Prefixes: choosing the CSS property
 
----
-
-## Prefixes: Decide the CSS Property
-
-Prefixes correspond to **utility generators** built into Tailwind.  
-Each generator emits a _specific CSS property_.
+Prefixes correspond to **utility generators** built into Tailwind. Each generator emits a specific CSS property.
 
 Examples:
 
-| Prefix    | CSS property emitted |
-| --------- | -------------------- |
-| `bg-`     | `background-color`   |
-| `text-`   | `color`              |
-| `border-` | `border-color`       |
-| `font-`   | `font-family`        |
-| `p-`      | `padding`            |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Prefix</th>
+      <th align="left">CSS property emitted</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>bg-</code>
+      </td>
+      <td>
+        <code>background-color</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>text-</code>
+      </td>
+      <td>
+        <code>color</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>border-</code>
+      </td>
+      <td>
+        <code>border-color</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>font-</code>
+      </td>
+      <td>
+        <code>font-family</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>p-</code>
+      </td>
+      <td>
+        <code>padding</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-You can visualize it like this:
+You can visualize this mapping like so:
 
 ```
 bg-*      → background-color: VALUE
@@ -166,68 +171,113 @@ text-*    → color: VALUE
 border-*  → border-color: VALUE
 ```
 
-Prefixes decide the **key** in the CSS rule.
+In CSS terminology, `background-color: #123456;` is a **declaration**, where `background-color` is the property and `#123456` is the value. Prefixes decide the property in the declaration.
 
----
+## Tokens: choosing the value
 
-## Tokens: Supply the Value
-
-Tokens are named values that Tailwind can substitute into utilities.
+Tokens decide the value of the CSS declaration.
 
 Examples:
 
-| Token        | Value                     |
-| ------------ | ------------------------- |
-| `white`      | `#ffffff`                 |
-| `2`          | `0.5rem`                  |
-| `sans`       | `system-ui, sans-serif`   |
-| `background` | `var(--color-background)` |
+<table>
+  <thead>
+    <tr>
+      <th align="left">Token</th>
+      <th align="left">Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>
+        <code>white</code>
+      </td>
+      <td>
+        <code>#ffffff</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>2</code>
+      </td>
+      <td>
+        <code>0.5rem</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>sans</code>
+      </td>
+      <td>
+        <code>system-ui, sans-serif</code>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <code>background</code>
+      </td>
+      <td>
+        <code>var(--color-background)</code>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
-Tokens:
+Internally, Tailwind groups tokens into categories. Conceptually, you can imagine objects like these somewhere in Tailwind’s codebase:
 
-- do **not** know which CSS property they’ll be used for
-- are just values
+```js
+tokens.colors = {
+  white: "#ffffff",
+  black: "#000000",
+};
+```
+
+## How Tailwind generates CSS at build time
+
+At build time, the Tailwind compiler scans your codebase to see which utility classes are used. For example, if it encounters the following markup:
+
+```html
+<div className="bg-white text-black">Hello world!</div>
+```
+
+Tailwind will activate the `bg-` and `text-` utility generators. These generators read from `tokens.colors`, retrieve the values for `white` and `black`, and generate the following CSS:
+
+```css
+.bg-white {
+  background-color: #ffffff;
+}
+
+.text-black {
+  color: #000000;
+}
+```
+
+This CSS is included in the final stylesheet sent to the browser.
+
+## Little knowledge check
+
+What would happen if we declared something crazy like this?
+
+```html
+<div className="p-white">Hello crazy world!</div>
+```
+
+The `p-` utility generator reads from the `spacing` category, which might look conceptually like this:
+
+```js
+tokens.spacing = {
+  0: "0px",
+  1: "0.25rem",
+  2: "0.5rem",
+};
+```
+
+Since `white` does not exist in `tokens.spacing`, Tailwind does not generate any CSS for the `p-white` class.
 
 ---
 
-## Categories: The Missing Mental Model
+# The `@theme inline` at-rule
 
-This is the part most explanations skip — and the source of most confusion.
-
-Internally, Tailwind groups tokens into **categories**:
-
-```
-colors
-spacing
-fontSize
-fontFamily
-borderWidth
-```
-
-Categories are **not for the browser**.  
-They exist so Tailwind knows **which utility generators may consume which tokens**.
-
-### ASCII diagram
-
-```
-           ┌────────────┐
-           │  colors    │
-           │────────────│
-           │ white      │
-           │ black      │
-           │ background │
-           └─────┬──────┘
-                 │
-     ┌───────────┼────────────┐
-     │           │            │
-   bg-*        text-*      border-*
-```
-
-All three prefixes are allowed to read from the `colors` category.
-
----
-
-## Registering a Runtime Color Token
+Now let’s go back to our original CSS file. What does this block mean?
 
 ```css
 @theme inline {
@@ -235,105 +285,45 @@ All three prefixes are allowed to read from the `colors` category.
 }
 ```
 
-This tells Tailwind:
+Here’s how to read it:
 
-- category: `color`
-- token name: `background`
-- value: runtime-resolved CSS variable
+- `background` (in `--color-background`) is the **token name**
+- `color` (in `--color-background`) is the **category** the token belongs to
+- `inline` tells Tailwind to keep the value as a CSS variable and defer resolution until runtime
 
-Now these utilities are valid:
+In other words, this code tells Tailwind to register a new color token named `background` with the value `var(--background)`.
 
-```
-bg-background
-text-background
-border-background
-```
+Conceptually, the token object now looks like this:
 
----
-
-## Why Categories Matter (A Concrete Failure Case)
-
-```css
-@theme inline {
-  --spacing-background: var(--background);
-}
+```js
+tokens.colors = {
+  white: "#ffffff",
+  black: "#000000",
+  background: "var(--background)",
+};
 ```
 
-This registers `background` under the `spacing` category.
+## Using the new token
 
-Result:
+Later, when Tailwind scans your codebase and finds:
 
-```
-bg-background      ❌ not generated
-text-background   ❌ not generated
-p-background      ✅ generated (but meaningless)
+```html
+<div className="bg-background">Hello world!</div>
 ```
 
-Same value.  
-Different category.  
-Completely different outcome.
-
-Categories act as **filters**, not types.
-
----
-
-## What `@theme` Does (Without `inline`)
-
-```css
-@theme {
-  --color-brand: #2563eb;
-}
-```
-
-This registers a **static** color token.
-
-Tailwind assumes:
-
-- the value is known at build time
-- it can safely bake it into generated CSS
-
-Result:
-
-```css
-.bg-brand {
-  background-color: #2563eb;
-}
-```
-
----
-
-## Why `inline` Exists
-
-```css
-@theme inline {
-  --color-background: var(--background);
-}
-```
-
-`inline` is a contract with Tailwind:
-
-> “This value cannot be resolved at build time.  
-> Emit a CSS variable reference instead.”
-
-Generated output:
+The `bg-` generator emits a rule using the registered token:
 
 ```css
 .bg-background {
-  background-color: var(--color-background);
+  background-color: var(--background);
 }
 ```
 
-At runtime, the browser resolves:
+At runtime, the browser resolves `var(--background)` using the value defined on `:root` (for example, `#ffffff` in light mode). The CSS rule itself is not modified; only the computed value changes.
 
-```
-var(--color-background)
-→ var(--background)
-→ light or dark value
-```
+## Another little knowledge check
 
----
-
-## What Happens Without `inline` (And Why It Breaks)
+So what happens if we remove `inline`?
 
 ```css
 @theme {
@@ -341,67 +331,19 @@ var(--color-background)
 }
 ```
 
-This violates Tailwind’s assumptions.
+Without `inline`, Tailwind assumes token values are static and must be resolved at build time. Since `var(--background)` cannot be resolved during compilation, the token is not registered in `tokens.colors`.
 
-Tailwind expects static values inside `@theme`.  
-But `var(--background)` is runtime-only.
-
-Consequences:
-
-- tokens may be dropped
-- utilities may not be generated
-- variants and modifiers may fail unpredictably
-
-The browser could still resolve the variable — but Tailwind can’t safely reason about it.
+As a result, when Tailwind encounters `bg-background`, no CSS rule is generated, and the class has no effect.
 
 ---
 
-## The Full Pipeline (End-to-End)
+# Conclusion
 
-```
-BUILD TIME (Tailwind)
-─────────────────────
-@theme inline
-    ↓
-register tokens
-    ↓
-scan HTML / TSX
-    ↓
-generate utilities
+In short, here’s how Tailwind works:
 
-RUNTIME (Browser)
-─────────────────
-:root variables
-    ↓
-@media overrides
-    ↓
-CSS variable resolution
-    ↓
-paint pixels
-```
+- prefixes choose CSS properties
+- tokens provide values
+- categories determine which generators can consume which tokens
+- `@theme inline` allows runtime resolution via CSS variables
 
-Tailwind and the browser never overlap responsibilities.
-
----
-
-## Final Mental Model (Lock This In)
-
-```
-Prefix   → chooses the CSS property
-Category → controls which prefixes may use the token
-Token    → supplies the value
-```
-
-And the most important sentence in this entire article:
-
-> **`@theme inline` is not for the browser — it is a promise to Tailwind that this token resolves at runtime, not at build time.**
-
----
-
-## Closing Thoughts
-
-Once you stop thinking of Tailwind as “CSS classes” and start thinking of it as a **compile-time rule engine**, everything becomes predictable.
-
-Dark mode, theming, and CSS variables stop feeling magical — and start feeling _mechanical_.
-
-That’s exactly where you want to be.
+Who would have thought that a short conversation with an AI, starting from a single CSS file, could provide such a lesson? That’s one of the reasons I enjoy learning with AI.

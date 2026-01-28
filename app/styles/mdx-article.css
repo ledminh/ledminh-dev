@@ -79,3 +79,26 @@
   border-radius: 0;
   font-size: inherit;
 }
+
+.mdx-article table {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-collapse: collapse;
+  background: #404040;
+}
+
+.mdx-article thead {
+  background: #78350f;
+  color: #ffffff;
+}
+
+.mdx-article th,
+.mdx-article td {
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.mdx-article tbody tr {
+  border-bottom: 2px solid #525252;
+}

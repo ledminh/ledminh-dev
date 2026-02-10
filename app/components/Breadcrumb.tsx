@@ -39,7 +39,7 @@ export default function Breadcrumb({ className = "" }: BreadcrumbProps) {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={`absolute left-6 top-6 text-xs uppercase tracking-[0.18em] text-(--ink-soft) sm:left-10 sm:top-8 ${className}`.trim()}
+      className={`relative z-10 px-6 pt-6 text-xs uppercase tracking-[0.18em] text-(--ink-soft) sm:px-10 sm:pt-8 ${className}`.trim()}
     >
       <ol className="flex flex-wrap items-center gap-2">
         {crumbs.map((crumb, index) => {

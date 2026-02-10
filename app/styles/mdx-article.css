@@ -14,15 +14,15 @@
 }
 
 .mdx-article h1 {
-  font-size: 2.25rem;
+  font-size: clamp(1.6rem, 5vw, 2.25rem);
 }
 
 .mdx-article h2 {
-  font-size: 1.6rem;
+  font-size: clamp(1.25rem, 4vw, 1.6rem);
 }
 
 .mdx-article h3 {
-  font-size: 1.2rem;
+  font-size: clamp(1.05rem, 3vw, 1.2rem);
 }
 
 .mdx-article p {
@@ -81,6 +81,9 @@
 }
 
 .mdx-article table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   width: 100%;
   margin: 1.5rem 0;
   border-collapse: collapse;

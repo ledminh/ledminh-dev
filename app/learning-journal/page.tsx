@@ -68,7 +68,7 @@ async function getEntries(): Promise<Entry[]> {
           return null;
         }
 
-        let slug = file.name.replace(/\.mdx$/, ""),
+        const slug = file.name.replace(/\.mdx$/, ""),
           title = frontmatter.title || "",
           description = frontmatter.description || "",
           date = frontmatter.date || "";
@@ -124,7 +124,7 @@ export default async function LearningLabPage() {
           <div className="mt-10 grid gap-6 md:grid-cols-2">
             {entries.map((entry) => (
               <Link
-                className="glass-card block rounded-3xl p-6 transition hover:-translate-y-1 hover:shadow-[0_24px_60px_-40px_rgba(15,23,42,0.6)]"
+                className="glass-card block rounded-3xl p-6 transition hover:-translate-y-1 active:-translate-y-1 hover:shadow-[0_24px_60px_-40px_rgba(15,23,42,0.6)] active:shadow-[0_24px_60px_-40px_rgba(15,23,42,0.6)]"
                 href={`/learning-journal/entries/${entry.slug}`}
                 key={entry.slug}
               >
